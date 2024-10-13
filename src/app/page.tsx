@@ -1,95 +1,50 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link"
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+interface Film{
+  kinopoiskId: number,
+  nameRu: string,
+  posterUrlPreview: string,
+  year: number
+}
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+interface Films{
+  items: Film[]
+}
+ 
+const fetchData = async(): Promise<Films>=>{
+  return fetch('https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=TOP_250_MOVIES&page=1',{
+    method: 'GET',
+      headers: {
+        'X-API-KEY': '07ca675a-db71-4e5b-8119-5618275b2fab',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response=>response.json())
+}
+
+export default async function Home(){
+  const films = await fetchData()
+  
+  return(
+    <>
+      <main id="app">
+        <div className="films-box">
+          {
+            films.items.map(film =>( 
+              <Link key={film.kinopoiskId} href={`/film/` + film.kinopoiskId}>
+                <div className="film-preview">
+                  <figure className="film-preview__fotobox">
+                    <img src={film.posterUrlPreview} alt="" />
+                  </figure>
+                  <h6 className="film-preview__name">{film.nameRu}</h6> 
+                  <time className="film-preview__year">{film.year}</time>
+                </div>
+              </Link>
+            ))
+          } 
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    </>
+  )
 }
+

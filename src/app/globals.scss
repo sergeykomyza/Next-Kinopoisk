@@ -1,0 +1,105 @@
+*{
+  font-family: var(--font-geist-sans);
+  box-sizing: border-box;
+  margin: 0;
+}
+
+a{
+  text-decoration: none;
+}
+
+body{
+  font-family: var(--font-geist-sans);
+  background: #000;
+}
+
+.header{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  a{
+    font-family: var(--font-geist-sans);
+    color: #FFF;
+    font-size: 30px;
+  }
+}
+
+main{
+  max-width: 1232px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.films-box{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.film-preview{
+  text-decoration: none;
+  &__name{
+    margin: 0 0 10px 0;
+    font-family: var(--font-geist-sans);
+    font-size: 20px;
+    color: #FFF;
+  }
+  &__fotobox{
+    width: 100%;
+    height: 320px;
+    margin: 0 0 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    @media(max-width: 1232px){
+      height: 26.2vw;
+    }
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all .3s;
+    }
+    &:hover{
+      img{
+        transform: scale(1.1);
+      }
+    }
+  }
+  &__year{
+    font-family: var(--font-geist-sans);
+    font-size: 14px;
+    color: #FFF;
+  }
+}
+
+.film{
+  display: grid;
+	grid-template-columns: 400px 1fr;
+	gap: 50px;
+  color: #FFF;
+  &__fotobox{
+    border-radius: 10px;
+    overflow: hidden;
+    img{
+      width: 100%;
+    }
+  }
+  &__name{
+    margin-bottom: 10px;
+    font-size: 30px;
+  }
+  &__originalname{
+    margin-bottom: 20px;
+    font-size: 25px;
+    font-weight: 400;
+  }
+  &__year{
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #FFF;
+
+  }
+}
