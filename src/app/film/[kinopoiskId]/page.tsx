@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface FilmData {
   kinopoiskId: number,
@@ -10,7 +11,7 @@ interface FilmData {
   nameOriginal: string
 }
 
-const fetchData = async (kinopoiskId: number): Promise<FilmData> => {
+const fetchData = async (kinopoiskId: number): Promise<FilmData | null> => {
   const response = await fetch(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${kinopoiskId}`, {
     method: 'GET',
     headers: {
@@ -20,7 +21,7 @@ const fetchData = async (kinopoiskId: number): Promise<FilmData> => {
   });
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    return null
   }
 
   return response.json();
@@ -34,6 +35,15 @@ interface FilmProps {
 
 const Film: React.FC<FilmProps> = async ({ params: { kinopoiskId } }) => {
   const film = await fetchData(kinopoiskId);
+
+  if (!film) {
+    return (
+      <main className='error-page'>
+        <h1 className='error-page__title'>Такого фильма не существует</h1>
+        <Link href="/" className='error-page__backlink'>Вернуться на главную</Link>
+      </main>
+    );
+  }
   
   return (
     <>
